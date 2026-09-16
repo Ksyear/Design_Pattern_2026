@@ -1,0 +1,18 @@
+#include "duck/MallardDuck.h"
+
+#include <iostream>
+#include <memory>
+
+#include "fly/FlyWithWings.h"
+#include "quack/Quack.h"
+
+// 기본 전략은 '기반 클래스 생성자에 넘기는 인자'일 뿐이다.
+// 몸통에서 대입하지 않으므로 전략이 비어 있는 순간이 아예 없다.
+MallardDuck::MallardDuck()
+	: Duck("물오리",
+	       std::make_unique<FlyWithWings>(),
+	       std::make_unique<Quack>()) {}
+
+void MallardDuck::display() const {
+	std::cout << "[물오리] 모습을 보여 줍니다\n";
+}

@@ -1,0 +1,14 @@
+# 빌드 산출물
+build/
+build-cmake/
+*.o
+*.d
+*.dSYM/
+
+# macOS
+.DS_Store
+
+# 에디터
+.vscode/
+.idea/
+compile_commands.json

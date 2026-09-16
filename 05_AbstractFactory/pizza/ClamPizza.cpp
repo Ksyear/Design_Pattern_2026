@@ -1,0 +1,13 @@
+#include "pizza/ClamPizza.h"
+
+#include <iostream>
+
+void ClamPizza::prepare() {
+	std::cout << "준비 중: " << name_ << '\n';
+	dough_ = factory_.createDough();
+	sauce_ = factory_.createSauce();
+	cheese_ = factory_.createCheese();
+	clam_ = factory_.createClam();
+	std::cout << "  " << dough_->name() << " / " << sauce_->name() << " / " << cheese_->name()
+	          << " / " << clam_->name() << '\n';
+}
