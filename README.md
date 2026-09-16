@@ -1,11 +1,24 @@
-# Design Patterns in C++17
+# Design Patterns in C++20
 
-> 디자인 패턴 22종을 C++17로 구현한 실행 가능한 예제 모음
+> 디자인 패턴 22종을 C++20으로 구현한 실행 가능한 예제 모음
 > 패턴마다 완성 예제와 빈 연습 문제가 한 쌍으로 들어 있다
 
-## 1. 빌드하고 실행하기
+## 1. 받아서 실행하기
 
-두 가지 방법 중 편한 쪽을 쓰면 된다. 외부 라이브러리는 하나도 필요 없다.
+### 준비물
+
+| 항목 | 최소 버전 | 비고 |
+|---|---|---|
+| C++20 컴파일러 | gcc 10+ / clang 12+ / Apple clang 13+ / MSVC 2019 16.11+ | |
+| CMake | 3.16+ | Makefile만 쓸 거면 없어도 된다 |
+| 외부 라이브러리 | 없음 | 표준 라이브러리만 쓴다 |
+
+### 받기
+
+```sh
+git clone git@github.com:Ksyear/Design_Pattern_2026.git
+cd Design_Pattern_2026
+```
 
 ### Makefile (가장 빠름)
 
@@ -16,6 +29,18 @@ make 09_Command         # 하나만 빌드
 make run-all            # 22개를 순서대로 실행
 make ex                 # 연습 스켈레톤 전부 빌드
 make clean              # build/ 삭제
+```
+
+`run-` 뒤에 붙이는 이름은 폴더 이름과 같다. 전체 목록은 아래 3절의 표에 있다.
+
+```
+$ make run-01_Strategy
+===== 01_Strategy =====
+[물오리] 모습을 보여 줍니다
+  날개를 펄럭여 날아갑니다
+  꽥꽥
+  모든 오리는 물에 뜹니다
+...
 ```
 
 ### CMake
@@ -29,8 +54,15 @@ cmake --build build-cmake --target run_all     # 전체 실행
 cmake --build build-cmake --target exercises   # 연습 스켈레톤만 빌드
 ```
 
-- 요구 사항: C++17 컴파일러 (clang 5+, gcc 7+, MSVC 2017+), CMake 3.16+
-- 경고 옵션 `-Wall -Wextra -Wpedantic`이 켜져 있고, 완성 예제는 전부 경고 0개 상태로 유지
+### 표준을 바꾸려면
+
+두 곳에 있다. `Makefile`의 `CXXFLAGS`와 `CMakeLists.txt`의 `CMAKE_CXX_STANDARD`다.
+
+예제 코드 자체는 C++20 전용 기능을 쓰지 않으므로 `c++17`로 내려도 경고 없이 그대로 빌드된다.
+표준을 올려 둔 이유는 학습용이기 때문이다. `std::variant`나 지정 초기화자처럼
+노트에서 대안으로 언급하는 문법을 그 자리에서 바로 시험해 볼 수 있다.
+
+경고 옵션 `-Wall -Wextra -Wpedantic`이 켜져 있고, 완성 예제와 연습 스켈레톤 모두 경고 0개 상태로 유지한다.
 
 ## 2. 폴더 구조
 

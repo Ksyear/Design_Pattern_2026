@@ -14,7 +14,7 @@
 # main.cpp 와 기능 폴더의 모든 .cpp 를 모아 실행 파일 하나로 묶는다
 
 CXX      ?= c++
-CXXFLAGS ?= -std=c++17 -Wall -Wextra -Wpedantic -O1
+CXXFLAGS ?= -std=c++20 -Wall -Wextra -Wpedantic -O1
 BIN      := build/bin
 
 DIRS     := $(sort $(patsubst %/,%,$(dir $(wildcard [0-9][0-9]_*/main.cpp))))
