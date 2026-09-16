@@ -1,7 +1,7 @@
-# C++ 학습 공간
+# Design Patterns in C++17
 
-> 헤드 퍼스트 디자인 패턴(개정판)의 자바 예제를 C++17로 옮긴 실행 가능한 학습 공간
-> 노트는 `../공부자료/` 폴더에, 코드는 여기에 있다
+> 디자인 패턴 22종을 C++17로 구현한 실행 가능한 예제 모음
+> 패턴마다 완성 예제와 빈 연습 문제가 한 쌍으로 들어 있다
 
 ## 1. 빌드하고 실행하기
 
@@ -35,7 +35,7 @@ cmake --build build-cmake --target exercises   # 연습 스켈레톤만 빌드
 ## 2. 폴더 구조
 
 ```
-_C++ 학습 공간/
+.
 	CMakeLists.txt          새 폴더를 추가하면 자동으로 타깃이 생긴다
 	Makefile                cmake 없이 쓰는 최소 빌드
 	NN_PatternName/
@@ -50,7 +50,7 @@ _C++ 학습 공간/
 
 ```
 01_Strategy/
-	main.cpp              조립과 호출만 (43줄)
+	main.cpp              조립과 호출만
 	fly/                  나는 기능   - FlyBehavior.h + 구상 전략 3개
 	quack/                우는 기능   - QuackBehavior.h + 구상 전략 3개
 	duck/                 오리 본체   - Duck.* + 구상 오리 3개
@@ -62,58 +62,55 @@ _C++ 학습 공간/
 - 빌드는 `main.cpp` + 기능 폴더의 모든 `.cpp`를 모아 실행 파일 하나로 묶는다
 - 폴더 간 참조는 `-I<패턴폴더>` 덕분에 `#include "fly/FlyBehavior.h"`처럼 쓴다 (`../` 없음)
 - 인클루드 가드는 `<폴더>_<파일>_H` 규약을 따른다
-- 완성 예제는 **책의 시나리오**를 그대로 쓴다 -> 노트와 1:1로 대응됨
-- 연습 문제는 refactoring.guru의 예제나 C++ 고유 함정을 다룬다
+- 완성 예제는 패턴의 의도가 드러나는 고전적인 시나리오를 쓴다
+- 연습 문제는 다른 도메인이나 C++ 고유의 함정을 다룬다
 
 ## 3. 학습 순서
 
 패턴 이름 앞 번호가 곧 권장 순서다. 생성 -> 행동 -> 구조 순이 아니라
 **앞 패턴이 뒤 패턴의 밑바탕이 되는 순서**로 배치했다.
 
-| 번호 | 패턴 | 책 | 완성 예제 시나리오 | 기능 폴더 |
-|---|---|---|---|---|
-| 01 | Strategy | 1장 | SimUDuck 오리 시뮬레이션 | `duck` `fly` `quack` `guru`¹ |
-| 02 | Observer | 2장 | 기상 스테이션 | `display` `observer` `subject` |
-| 03 | Decorator | 3장 | 스타버즈 커피 | `beverage` `condiment` |
-| 04 | Factory Method | 4장 | 피자 가게 프레임워크 | `chicago` `ny` `pizza` `store` |
-| 05 | Abstract Factory | 4장 | 피자 원재료 공장 | `chicago` `factory` `ingredient` `ny` `pizza` `store` |
-| 06 | Builder | 14장 | 패턴랜드 휴가 계획표 | `builder` `director` `plan` |
-| 07 | Prototype | 14장 | 몬스터 레지스트리 | `monster` `registry` |
-| 08 | Singleton | 5장 | 초콜릿 보일러 | `boiler` |
-| 09 | Command | 6장 | 만능 IoT 리모컨 | `command` `device` `remote` |
-| 10 | Memento | 14장 | RPG 세이브 슬롯 | `character` `save` |
-| 11 | Chain of Responsibility | 14장 | 왕뽑기 메일 분류 | `handler` `mail` |
-| 12 | Mediator | 14장 | 자동화 주택 | `appliance` `mediator` |
-| 13 | Adapter | 7장 | 칠면조를 오리로 | `adapter` `duck` `turkey` |
-| 14 | Facade | 7장 | 홈시어터 | `device` `facade` |
-| 15 | Bridge | 14장 | 리모컨 x TV | `remote` `tv` |
-| 16 | Template Method | 8장 | 커피와 홍차 | `beverage` |
-| 17 | Iterator | 9장 | 식당 + 팬케이크 하우스 합병 | `iterator` `menu` `waitress` |
-| 18 | Composite | 9장 | 메뉴 안의 서브메뉴 | `component` `composite` `leaf` |
-| 19 | Flyweight | 14장 | 조경 설계 앱의 나무 | `factory` `flyweight` `forest` |
-| 20 | Visitor | 14장 | 메뉴 영양 정보 | `element` `visitor` |
-| 21 | State | 10장 | 뽑기 기계 | `machine` `state` |
-| 22 | Proxy | 11장 | 앨범 커버 뷰어 | `image` `person` `proxy` |
+| 번호 | 패턴 | 완성 예제 시나리오 | 기능 폴더 |
+|---|---|---|---|
+| 01 | Strategy | 오리 시뮬레이션 | `duck` `fly` `quack` `guru`¹ |
+| 02 | Observer | 기상 스테이션 | `display` `observer` `subject` |
+| 03 | Decorator | 커피 주문과 첨가물 | `beverage` `condiment` |
+| 04 | Factory Method | 피자 가게 프레임워크 | `chicago` `ny` `pizza` `store` |
+| 05 | Abstract Factory | 피자 원재료 공장 | `chicago` `factory` `ingredient` `ny` `pizza` `store` |
+| 06 | Builder | 휴가 계획표 | `builder` `director` `plan` |
+| 07 | Prototype | 몬스터 레지스트리 | `monster` `registry` |
+| 08 | Singleton | 초콜릿 보일러 | `boiler` |
+| 09 | Command | IoT 리모컨 | `command` `device` `remote` |
+| 10 | Memento | RPG 세이브 슬롯 | `character` `save` |
+| 11 | Chain of Responsibility | 메일 분류 | `handler` `mail` |
+| 12 | Mediator | 자동화 주택 | `appliance` `mediator` |
+| 13 | Adapter | 칠면조를 오리로 | `adapter` `duck` `turkey` |
+| 14 | Facade | 홈시어터 | `device` `facade` |
+| 15 | Bridge | 리모컨 x TV | `remote` `tv` |
+| 16 | Template Method | 커피와 홍차 | `beverage` |
+| 17 | Iterator | 자료구조가 다른 두 메뉴의 통합 | `iterator` `menu` `waitress` |
+| 18 | Composite | 메뉴 안의 서브메뉴 | `component` `composite` `leaf` |
+| 19 | Flyweight | 조경 설계 앱의 나무 | `factory` `flyweight` `forest` |
+| 20 | Visitor | 메뉴 영양 정보 | `element` `visitor` |
+| 21 | State | 뽑기 기계 | `machine` `state` |
+| 22 | Proxy | 앨범 커버 뷰어 | `image` `person` `proxy` |
 
-¹ `01_Strategy/guru/` 는 refactoring.guru 의 GoF 교과서형 예제를 이 저장소 규약으로 옮긴 것이다.
-같은 패턴을 **도메인 언어**(`Duck`/`fly`)로 쓸 때와 **패턴 용어**(`Context`/`Strategy`)로 쓸 때의
+¹ `01_Strategy/guru/` 는 같은 패턴을 GoF 교과서 용어로 다시 쓴 것이다.
+**도메인 언어**(`Duck`/`fly`)로 쓸 때와 **패턴 용어**(`Context`/`Strategy`)로 쓸 때의
 차이를 한 실행 파일 안에서 비교하려고 나란히 뒀다.
 
 ## 4. 패턴 하나를 공부하는 법
 
-1. `../공부자료/PatternName.md`의 **본문**을 읽는다 (책 흐름)
-2. `NN_PatternName/main.cpp`를 실행해 출력부터 본다
-3. 코드를 읽는다 - `main.cpp`의 머리말 주석이 폴더 지도를 알려 준다.
-   그다음 인터페이스 헤더 -> 구상 클래스 -> `main.cpp` 순으로 보면 된다.
-   주석이 노트의 요약본 역할을 하고, 폴더 이름이 패턴의 참여자 이름과 대응된다
-4. 노트의 **부록**을 읽는다 (refactoring.guru 보충: 적용 시점, 구현 절차, 장단점, 관계)
-5. `exercise.cpp`의 TODO를 직접 채운다
-6. 노트의 `부록 D. C++로 구현할 때 주의할 점`으로 돌아와 자기 코드를 점검한다
+1. `NN_PatternName/main.cpp`를 실행해 출력부터 본다
+2. `main.cpp`의 머리말 주석이 폴더 지도를 알려 준다.
+   그다음 인터페이스 헤더 -> 구상 클래스 -> `main.cpp` 순으로 읽으면 된다.
+   폴더 이름이 곧 패턴 참여자의 역할과 대응된다
+3. `exercise.cpp`의 TODO를 직접 채운다
+4. 아래 5절의 C++ 고유 주의점으로 돌아와 자기 코드를 점검한다
 
-## 5. 자바 예제를 C++로 옮기면서 달라진 점
+## 5. 자바 구현을 C++로 옮길 때 달라지는 점
 
-책은 자바 기준이라 C++에서는 그대로 옮길 수 없는 부분이 있다. 공통된 차이는 아래와 같고,
-패턴별 세부 사항은 각 노트의 `부록 D`에 정리되어 있다.
+패턴 설명은 대개 자바를 기준으로 쓰여 있어 C++에서는 그대로 옮길 수 없는 부분이 있다.
 
 | 주제 | 자바 | 이 저장소의 C++ |
 |---|---|---|
@@ -129,13 +126,13 @@ _C++ 학습 공간/
 | 반복자 | `Iterator` 인터페이스 | STL 반복자 규약(`begin`/`end`)이 이미 이 패턴 (17_Iterator) |
 | 필드 초기화 | `protected` 필드에 서브클래스가 대입 | **생성자 주입 + `private`** (아래 참고) |
 
-### 캡슐화 규약 - 책과 의도적으로 다른 부분
+### 캡슐화 규약 - 흔한 자바 구현과 의도적으로 다른 부분
 
-책(자바)은 기반 클래스의 필드를 `protected` 로 열어 두고 서브클래스 생성자 몸통에서 대입한다.
+자바 구현은 기반 클래스의 필드를 `protected` 로 열어 두고 서브클래스 생성자 몸통에서 대입하는 경우가 많다.
 이 저장소는 그 대신 **기반 클래스 생성자로 넘기고 필드는 `private`** 으로 닫는다.
 
 ```cpp
-// 책 방식 - "전략이 없는 오리"가 잠시 존재할 수 있다
+// 흔한 방식 - "전략이 없는 오리"가 잠시 존재할 수 있다
 MallardDuck::MallardDuck() : Duck("물오리") {
 	flyBehavior_ = std::make_unique<FlyWithWings>();   // protected 필드에 대입
 }
