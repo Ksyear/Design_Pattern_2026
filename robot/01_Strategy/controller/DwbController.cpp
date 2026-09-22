@@ -1,11 +1,17 @@
 #include "controller/DwbController.h"
 
+#include <algorithm>
 #include <array>
 #include <cmath>
 
 namespace {
 
 constexpr double kPi = 3.14159265358979323846;
+constexpr double kDt = 0.5;
+constexpr double kMaxLinearVel = 0.55;
+constexpr double kMaxAngularVel = 0.8;
+constexpr double kMaxLinearAccel = 0.6;
+constexpr double kMaxAngularAccel = 1.6;
 
 double normalizeAngle(double rad)
 {
@@ -18,33 +24,42 @@ double normalizeAngle(double rad)
 	return rad;
 }
 
-}  // namespace
+std::array<double, 3> sampleWindow(double lo, double hi)
+{
+	return {lo, 0.5 * (lo + hi), hi};
+}
+
+}
 
 Twist DwbController::computeVelocity(const Pose2D& pose,
                                      const Pose2D& goal,
-                                     const LaserScan& scan) const
+                                     const LaserScan& scan,
+                                     const Twist& current) const
 {
-	// 동적 윈도 : 지금 낼 수 있는 속도 후보들
-	const std::array<Twist, 3> window{
-		Twist{0.50, -0.4},
-		Twist{0.55, 0.0},
-		Twist{0.50, 0.4},
-	};
+	const double vLo = std::max(0.0, current.linear_x - kMaxLinearAccel * kDt);
+	const double vHi = std::min(kMaxLinearVel, current.linear_x + kMaxLinearAccel * kDt);
+	const double wLo = std::max(-kMaxAngularVel, current.angular_z - kMaxAngularAccel * kDt);
+	const double wHi = std::min(kMaxAngularVel, current.angular_z + kMaxAngularAccel * kDt);
 
 	const double headingToGoal = std::atan2(goal.y - pose.y, goal.x - pose.x);
 
 	Twist best{};
 	double bestScore = -1e9;
-	for (const Twist& candidate : window) {
-		// 이 후보로 한 스텝 갔다고 치고 방향이 얼마나 맞는지 점수를 낸다
-		const double predictedYaw = pose.yaw + candidate.angular_z * 0.5;
-		const double alignment = -std::abs(normalizeAngle(headingToGoal - predictedYaw));
-		const double clearance = (scan.front_range_m < 1.0) ? -candidate.linear_x : 0.0;
+	for (const double v : sampleWindow(vLo, vHi)) {
+		const double stoppingDist = (v * v) / (2.0 * kMaxLinearAccel);
+		if (stoppingDist + v * kDt >= scan.front_range_m) {
+			continue;
+		}
 
-		const double score = 2.0 * alignment + 1.0 * clearance;
-		if (score > bestScore) {
-			bestScore = score;
-			best = candidate;
+		for (const double w : sampleWindow(wLo, wHi)) {
+			const double predictedYaw = pose.yaw + w * kDt;
+			const double alignment = -std::abs(normalizeAngle(headingToGoal - predictedYaw));
+
+			const double score = 2.0 * alignment + 0.3 * v;
+			if (score > bestScore) {
+				bestScore = score;
+				best = Twist{v, w};
+			}
 		}
 	}
 	return best;

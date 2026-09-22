@@ -18,11 +18,12 @@ ControllerServer::ControllerServer(std::string robotName,
 	}
 }
 
-void ControllerServer::controlLoop(const Pose2D& pose, const Pose2D& goal, const LaserScan& scan) const
+Twist ControllerServer::controlLoop(const Pose2D& pose, const Pose2D& goal, const LaserScan& scan, const Twist& odom) const
 {
-	const Twist raw = plugin_->computeVelocity(pose, goal, scan);  // 어떻게 갈지 - 전략 1
-	const Twist cmd = filter_->apply(raw);                         // 내보낼지   - 전략 2
+	const Twist raw = plugin_->computeVelocity(pose, goal, scan, odom);
+	const Twist cmd = filter_->apply(raw);
 	publishCmdVel(cmd);
+	return cmd;
 }
 
 void ControllerServer::setPlugin(std::unique_ptr<ControllerPlugin> plugin)
